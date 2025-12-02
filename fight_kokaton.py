@@ -155,6 +155,9 @@ class Score:
     スコアに関するクラス
     """
     def __init__(self):
+        """
+        スコアの初期値とフォント設定を行う
+        """
         self.score = 0
         self.fonto = pg.font.SysFont("hgp創英角ﾎﾟｯﾌﾟ体", 30)
         self.color = (0, 0, 255)
@@ -163,6 +166,10 @@ class Score:
         self.rect.center = 100, 50
 
     def update(self, screen: pg.Surface):
+        """
+        スコアを画面に描画する
+        引数 screen：画面Surface
+        """
         self.surface = self.fonto.render(f"Score: {self.score}", True, self.color)
         screen.blit(self.surface, self.rect)
 
@@ -171,12 +178,20 @@ class Explosion:
     爆発エフェクトに関するクラス
     """
     def __init__(self, rect: pg.Rect):
+        """
+        爆発エフェクト画像Surfaceを生成する
+        引数 rect：爆発を表示する位置のRect
+        """
         self.images = [pg.image.load(f"fig/explosion.gif"), pg.transform.flip(pg.image.load(f"fig/explosion.gif"), True, True)]
         self.rect = self.images[0].get_rect()
         self.rect.center = rect.center
         self.life = 60  # 爆発エフェクトの表示時間
 
     def update(self, screen: pg.Surface):
+        """
+        爆発エフェクトをアニメーション表示する
+        引数 screen：画面Surface
+        """
         if self.life > 0:
             screen.blit(self.images[(self.life // 4 + 1) % 2], self.rect)
             self.life -= 1
