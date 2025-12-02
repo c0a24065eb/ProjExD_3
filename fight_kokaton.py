@@ -188,6 +188,7 @@ def main():
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
     bg_img = pg.image.load("fig/pg_bg.jpg")
     bird = Bird((300, 200))
+    happy_interval = 120  # ハッピーこうかとんに変化する間隔（フレーム数）
 
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
     explosions = []
@@ -220,7 +221,12 @@ def main():
                 return
 
         key_lst = pg.key.get_pressed()
-        bird.update(key_lst, screen)
+        if len(bombs) == 0 and happy_interval > 0:
+            # 全ての爆弾を消したらこうかとん画像を切り替え，1秒間表示させる
+            bird.change_img(2, screen)
+            happy_interval -= 1
+        else:
+            bird.update(key_lst, screen)
         for j in range(len(beams)):
             if check_bound(beams[j].rct) != (True, True):
                 # 画面外に出たビームを消す
@@ -242,12 +248,7 @@ def main():
             explosion.update(screen)
         explosions = [explosion for explosion in explosions if explosion.life > 0]
 
-        if len(bombs) == 0:
-            # 全ての爆弾を消したらこうかとん画像を切り替え，1秒間表示させる
-            bird.change_img(2, screen)
-            pg.display.update()
-            time.sleep(1)
-            return
+       
         pg.display.update()
         tmr += 1
         clock.tick(50)
