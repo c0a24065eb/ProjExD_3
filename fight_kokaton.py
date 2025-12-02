@@ -163,8 +163,9 @@ class Explosion:
     """
     def __init__(self, rect: pg.Rect):
         self.images = [pg.image.load(f"fig/explosion.gif"), pg.transform.flip(pg.image.load(f"fig/explosion.gif"), True, True)]
-        self.rect = rect
-        self.life = 0
+        self.rect = self.images[0].get_rect()
+        self.rect.center = rect.center
+        self.life = 60  # 爆発エフェクトの表示時間
 
     def update(self, screen: pg.Surface):
         if self.life > 0:
@@ -180,6 +181,7 @@ def main():
     bird = Bird((300, 200))
 
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
+    explosions = []
 
     beams = []
 
@@ -219,12 +221,18 @@ def main():
             for i in range(len(bombs)):
                 if beams[j].rct.colliderect(bombs[i].rct):
                     # ビームが爆弾に当たったら，その爆弾を消す
+                    explosions.append(Explosion(bombs[i].rct))
                     bombs[i] = None
                     bombs = [bomb for bomb in bombs if bomb is not None]
                     beams[j] = None
                     score.score += 1
                     break
         beams = [beam for beam in beams if beam is not None]
+
+        for explosion in explosions:
+            explosion.update(screen)
+        explosions = [explosion for explosion in explosions if explosion.life > 0]
+
         if len(bombs) == 0:
             # 全ての爆弾を消したらこうかとん画像を切り替え，1秒間表示させる
             bird.change_img(2, screen)
