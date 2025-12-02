@@ -167,6 +167,8 @@ def main():
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
 
     beam = None  # ゲーム初期化時にはビームは存在しない
+
+    score = Score()
     clock = pg.time.Clock()
     tmr = 0
     
@@ -178,6 +180,7 @@ def main():
                 # スペースキー押下でBeamクラスのインスタンス生成
                 beam = Beam(bird)          
         screen.blit(bg_img, [0, 0])
+        score.update(screen)
 
         for bomb in bombs:
             bomb.update(screen)
