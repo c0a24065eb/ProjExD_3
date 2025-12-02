@@ -157,19 +157,23 @@ def main():
                 # スペースキー押下でBeamクラスのインスタンス生成
                 beam = Beam(bird)          
         screen.blit(bg_img, [0, 0])
-        
-        if bird.rct.colliderect(bomb.rct):
-            # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
-            bird.change_img(8, screen)
-            pg.display.update()
-            time.sleep(1)
-            return
+
+        if bomb is not None:
+            bomb.update(screen)
+            if bird.rct.colliderect(bomb.rct):
+                # ゲームオーバー時に，こうかとん画像を切り替え，1秒間表示させる
+                bird.change_img(8, screen)
+                pg.display.update()
+                time.sleep(1)
+                return
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         if beam is not None:
             beam.update(screen)
-        bomb.update(screen)
+            if (bomb is not None) and (beam.rct.colliderect(bomb.rct)):
+                # ビームが爆弾に当たったら爆弾を消す
+                bomb = None
         pg.display.update()
         tmr += 1
         clock.tick(50)
