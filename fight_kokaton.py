@@ -202,6 +202,7 @@ def main():
                     # ビームが爆弾に当たったら，その爆弾を消す
                     bombs[i] = None
                     beam = None
+                    score.score += 1
                     bombs = [bomb for bomb in bombs if bomb is not None]
                     break
         if len(bombs) == 0:
