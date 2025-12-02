@@ -166,7 +166,6 @@ def main():
 
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
 
-    beam = None  # ゲーム初期化時にはビームは存在しない
     beams = []
 
     score = Score()
@@ -197,15 +196,18 @@ def main():
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
         for beam in beams:
+            if check_bound(beam.rct) != (True, True):
+                # 画面外に出たビームを消す
+                beams.remove(beam)
+                continue
             beam.update(screen)
             for i in range(len(bombs)):
                 if beam.rct.colliderect(bombs[i].rct):
                     # ビームが爆弾に当たったら，その爆弾を消す
                     bombs[i] = None
-                    beam = None
                     score.score += 1
                     bombs = [bomb for bomb in bombs if bomb is not None]
-                    beams = [beam for beam in beams if beam is not None]
+                    beams.remove(beam)
                     break
         if len(bombs) == 0:
             # 全ての爆弾を消したらこうかとん画像を切り替え，1秒間表示させる
