@@ -174,6 +174,7 @@ def main():
             if (bomb is not None) and (beam.rct.colliderect(bomb.rct)):
                 # ビームが爆弾に当たったら爆弾を消す
                 bomb = None
+                bird.change_img(2, screen)  # ビームが当たったらこうかとんを喜ばせる
         pg.display.update()
         tmr += 1
         clock.tick(50)
