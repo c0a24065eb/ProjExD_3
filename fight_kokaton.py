@@ -157,6 +157,21 @@ class Score:
         self.surface = self.fonto.render(f"Score: {self.score}", True, self.color)
         screen.blit(self.surface, self.rect)
 
+class Explosion:
+    """
+    爆発エフェクトに関するクラス
+    """
+    def __init__(self, rect: pg.Rect):
+        self.images = [pg.image.load(f"fig/explosion.gif"), pg.transform.flip(pg.image.load(f"fig/explosion.gif"), True, True)]
+        self.rect = rect
+        self.life = 0
+
+    def update(self, screen: pg.Surface):
+        if self.life > 0:
+            screen.blit(self.images[self.life % 2], self.rect)
+            self.life -= 1
+        
+
 
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
