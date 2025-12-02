@@ -169,7 +169,7 @@ class Explosion:
 
     def update(self, screen: pg.Surface):
         if self.life > 0:
-            screen.blit(self.images[self.life % 2], self.rect)
+            screen.blit(self.images[(self.life // 4 + 1) % 2], self.rect)
             self.life -= 1
         
 
