@@ -195,20 +195,21 @@ def main():
 
         key_lst = pg.key.get_pressed()
         bird.update(key_lst, screen)
-        for beam in beams:
-            if check_bound(beam.rct) != (True, True):
+        for j in range(len(beams)):
+            if check_bound(beams[j].rct) != (True, True):
                 # 画面外に出たビームを消す
-                beams.remove(beam)
+                beams[j] = None
                 continue
-            beam.update(screen)
+            beams[j].update(screen)
             for i in range(len(bombs)):
-                if beam.rct.colliderect(bombs[i].rct):
+                if beams[j].rct.colliderect(bombs[i].rct):
                     # ビームが爆弾に当たったら，その爆弾を消す
                     bombs[i] = None
-                    score.score += 1
                     bombs = [bomb for bomb in bombs if bomb is not None]
-                    beams.remove(beam)
+                    beams[j] = None
+                    score.score += 1
                     break
+        beams = [beam for beam in beams if beam is not None]
         if len(bombs) == 0:
             # 全ての爆弾を消したらこうかとん画像を切り替え，1秒間表示させる
             bird.change_img(2, screen)
